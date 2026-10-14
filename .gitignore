@@ -1,0 +1,19 @@
+# Секретные данные
+config.py
+.env
+
+# База данных
+bot.db
+
+# Python
+pycache/
+*.pyc
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Логи
+*.log
