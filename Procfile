@@ -1,0 +1,1 @@
+worker: python 1_tg.py

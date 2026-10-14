@@ -161,6 +161,7 @@ def city_menu():
 
 def get_weather(city: str)-> dict | None:
     url="https://api.openweathermap.org/data/2.5/weather"
+    
     params={
         'q': city,
         'appid': WEATHER_API_KEY,
@@ -513,18 +514,21 @@ async def city_chosen(callback: CallbackQuery):
     city = pending_cities[user_id][idx]
     name_ru=city["name"]
     name_en=city["name_en"]
-    country=city["country"]
     
-    save_user_city(user_id, name_en, country)
     del pending_cities[user_id]
     
     await callback.message.edit_reply_markup(reply_markup=None)
     await callback.answer(f"Выбран город: {name_ru}")
     
-    weather=get_weather(name_en)
+    weather=get_weather(name_en) or get_weather(name_ru)
     if weather is None:
         await callback.message.answer("Попробуй ввести другое название города")
         return
+    
+    real_name=weather["name"]
+    real_country=weather["sys"]["country"]
+    save_user_city(user_id, real_name, real_country)
+    
     await show_weather(callback.message, weather)
 
 @dp.message(F.text)
